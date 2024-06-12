@@ -29,19 +29,35 @@ import Carousel from '../components/Carousel';
 const Profile = () => {
 
     const navigate = useNavigate();
+
     useEffect(() => {
+        setLoading(true);
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
         if (!userInfo) {
             navigate("/");
         }
+
+        setPhotos(userInfo.photos);
+        setUserData(userInfo);
+        setFormData({
+            photos: userInfo.photos,
+            location: userInfo.location,
+            gymName:userInfo.gymName,
+            ownerName:userInfo.ownerName,
+            description: userInfo.description
+        })
+
+
+    setLoading(false);
+        
     }, [navigate]);
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    console.log(userInfo);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [photos, setPhotos] = useState([]);
-    const [update, setUpdate] = useState(false);
-    const [gymData, setGymData] = useState({});
+    const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(false);
     const finalRef = React.useRef(null);
 
@@ -50,47 +66,10 @@ const Profile = () => {
         photos: "",
         description: "",
         location: "",
-        annual_membership_fees: "",
-        name: ""
+        gymName: "",
+        ownerName:""
     });
-    const [haveGym, setHaveGym] = useState(false);
 
-    const fetchGymDetails = async () => {
-        try {
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + userInfo.token
-                }
-            }
-            setLoading(true);
-            const { data } = await axios.get("/api/gym/fetchGym", config);
-
-            if (data.message) {
-                setHaveGym(false);
-            } else {
-                setHaveGym(true);
-                setPhotos(data.photos);
-                setGymData(data);
-                setFormData({
-                    photos: data.photos,
-                    location: data.location,
-                    name: data.name,
-                    description: data.description,
-                    annual_membership_fees: data.annual_membership_fees
-                })
-
-            }
-            setLoading(false);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    useEffect(() => {
-        fetchGymDetails();
-        console.log("hello");
-    }, []);
 
     const toast = useToast();
 
@@ -116,32 +95,22 @@ const Profile = () => {
             const uploadedImageURLs = await uploadImages(formData.photos);
             console.log(uploadedImageURLs);
 
-            if (update) {
                 await updateFormData({
-                    name: formData.name,
+                    gymName: formData.gymName,
+                    ownerName:formData.ownerName,
                     description: formData.description,
                     location: formData.location,
-                    annual_membership_fees: formData.annual_membership_fees,
                     photos: uploadedImageURLs,
                 });
-            } else {
-                await saveFormData({
-                    name: formData.name,
-                    description: formData.description,
-                    location: formData.location,
-                    annual_membership_fees: formData.annual_membership_fees,
-                    photos: uploadedImageURLs,
-                });
-            }
-
+         
             setFormData({
                 photos: [],
                 description: "",
                 location: "",
-                annual_membership_fees: "",
-                name: ""
+                gymName: "",
+                ownerName:""
             });
-            document.location.reload();
+            // document.location.reload();
             console.log("Form submitted successfully!");
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -170,44 +139,19 @@ const Profile = () => {
         }
     };
 
-    const saveFormData = async (formData) => {
+
+    const updateFormData = async ({gymName,ownerName,location,description,photos}) => {
 
         const config = {
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + userInfo.token
-            }
-        }
-        try {
-
-            await axios.post("/api/gym/addGym", formData, config);
-
-            toast({
-                title: 'Gym Registered successfully',
-                status: 'success',
-                duration: 5000,
-                position: 'bottom-right'
-
-            })
-            setLoading(false);
-        } catch (error) {
-            console.error("Error saving form data:", error);
-            throw error;
-        }
-    };
-
-    const updateFormData = async (formData) => {
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + userInfo.token
+                "Content-Type": "application/json"
             }
         }
         try {
             setLoading(true);
-            await axios.post("/api/gym/updateGym", formData, config);
-
+           const response= await axios.post("/api/user/update", {gymName,ownerName,location,description,photos,userId:userInfo._id}, config);
+           
+            localStorage.setItem("userInfo",JSON.stringify(response.data.updatedUserDetails));
             toast({
                 title: 'Gym Updated successfully',
                 status: 'success',
@@ -222,31 +166,6 @@ const Profile = () => {
         }
     };
 
-    const deleteGym = async () => {
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + userInfo.token
-            }
-        }
-        try {
-            setLoading(true);
-            await axios.get("/api/gym/deleteGym", config);
-
-            toast({
-                title: 'Gym deleted successfully',
-                status: 'success',
-                duration: 5000,
-                position: 'bottom-right'
-
-            })
-            setLoading(false);
-            document.location.reload();
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
 
     return (
         <div>
@@ -264,35 +183,33 @@ const Profile = () => {
                 width={"100px"}
             />}
 
-            {(!haveGym) ? (
-                <Button onClick={() => { onOpen(); setUpdate(false); }} mt={10}>Add Gym Details</Button>
-            ) : (
+           
                 <>
                     <Carousel cards={photos} />
                     <Text fontSize={'5xl'}>Gym Details</Text>
                     <div style={{ 'padding': '20px', display: 'flex', justifyContent: 'space-between' }}>
-                        <Text fontSize={'4xl'}>Name</Text>
-                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{gymData.name}</Text>
+                        <Text fontSize={'4xl'}>Gym Name</Text>
+                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{userData.gymName}</Text>
+                    </div>
+                    <div style={{ 'padding': '20px', display: 'flex', justifyContent: 'space-between' }}>
+                        <Text fontSize={'4xl'}>Owner Name</Text>
+                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{userData.ownerName}</Text>
                     </div>
                     <div style={{ 'padding': '20px', display: 'flex', justifyContent: 'space-between' }}>
                         <Text fontSize={'4xl'}>Description</Text>
-                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{gymData.description}</Text>
+                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{userData.description}</Text>
                     </div>
                     <div style={{ 'padding': '20px', display: 'flex', justifyContent: 'space-between' }}>
                         <Text fontSize={'4xl'}>Location</Text>
-                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{gymData.location}</Text>
+                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{userData.location}</Text>
                     </div>
-                    <div style={{ 'padding': '20px', display: 'flex', justifyContent: 'space-between' }}>
-                        <Text fontSize={'4xl'}>Annual Membership Fees</Text>
-                        <Text fontSize={'4xl'} style={{ 'float': 'right' }}>{gymData.annual_membership_fees}</Text>
-                    </div>
+                  
 
                     <QRCodeDisplay data={formData} />
 
-                    <Button colorScheme="red" style={{ float: 'right', margin: '0 20px 10px' }} onClick={() => { deleteGym(); }}>Delete Gym Details</Button>
-                    <Button colorScheme="blue" style={{ float: 'right', margin: '0 20px 10px' }} onClick={() => { onOpen(); setUpdate(true); }} >Update Gym Details</Button>
+                    <Button colorScheme="blue" style={{ float: 'right', margin: '0 20px 10px' }} onClick={() => { onOpen(); }} >Update Gym Details</Button>
                 </>
-            )}
+        
 
             <Modal isOpen={isOpen} onClose={onClose} >
                 <ModalOverlay />
@@ -306,21 +223,31 @@ const Profile = () => {
                                 <Input
                                     type="file"
                                     name="photos"
-
                                     onChange={handleChange}
                                     accept="image/*"
                                     multiple
                                     required
                                 />
                             </FormControl>
-                            <FormControl id="name">
-                                <FormLabel fontSize={20}>Name</FormLabel>
+                            <FormControl id="gymName">
+                                <FormLabel fontSize={20}>Gym Name</FormLabel>
                                 <Input
                                     type="text"
-                                    name="name"
-                                    value={formData.name}
+                                    name="gymName"
+                                    value={formData.gymName}
                                     onChange={handleChange}
-                                    placeholder="Enter name"
+                                    placeholder="Enter gym name"
+                                    required
+                                />
+                            </FormControl>
+                            <FormControl id="ownerName">
+                                <FormLabel fontSize={20}>Owner Name</FormLabel>
+                                <Input
+                                    type="text"
+                                    name="ownerName"
+                                    value={formData.ownerName}
+                                    onChange={handleChange}
+                                    placeholder="Enter owner name"
                                     required
                                 />
                             </FormControl>
@@ -345,18 +272,7 @@ const Profile = () => {
                                     required
                                 />
                             </FormControl>
-                            <FormControl id="annualMembershipFees">
-                                <FormLabel fontSize={20}>Annual Membership Fees</FormLabel>
-                                <Input
-                                    type="number"
-                                    name="annual_membership_fees"
-                                    value={formData.annual_membership_fees}
-                                    onChange={handleChange}
-                                    placeholder="Enter annual membership fees"
-                                    required
-                                />
-                            </FormControl>
-
+                           
                         </VStack>
 
                     </ModalBody>

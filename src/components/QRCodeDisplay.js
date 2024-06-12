@@ -16,9 +16,10 @@ const QRCodeDisplay = ({ data }) => {
 
   return (
     <Flex direction="column" alignItems="center">
-      <Box mb="4">
+      <Box m="4" border={2}>
         {/* Generate QR code for the concatenated data */}
-        <QRCode value={concatenatedData} />
+        <QRCode value={concatenatedData} size={256}/>
+        <Text m="2">QR Code</Text>
       </Box>
     </Flex>
   );
