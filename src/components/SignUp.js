@@ -200,11 +200,13 @@ const SignUp = () => {
           type="text"
           placeholder="Enter your name"
           onChange={handleChange}
+           focusBorderColor="black"
+          _placeholder={{ color: 'white' }}
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
           // _focus={{
-          //   borderBottomColor: "blue", // Color when the input is focused
+          //   borderBottomColor: "black", // Color when the input is focused
           //   boxShadow: "none", // Removes default focus ring
           // }}
         />
@@ -217,6 +219,8 @@ const SignUp = () => {
           name="email"
           placeholder="Enter your email"
           onChange={handleChange}
+          focusBorderColor="black"
+          _placeholder={{ color: 'white' }}
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -235,6 +239,8 @@ const SignUp = () => {
             name="password"
             placeholder="Enter your password"
             onChange={handleChange}
+             focusBorderColor="black"
+            _placeholder={{ color: 'white' }}
             // border="none"
             // borderBottom="2px solid white" // Adding bottom border
             // borderRadius="0" // Ensuring no rounded corners
@@ -244,7 +250,7 @@ const SignUp = () => {
             // }}
           ></Input>
           <InputRightElement width="4.5em" p="3px 0 3px 0">
-            <Button onClick={handleClick} colorScheme="blue">
+            <Button onClick={handleClick} style={{backgroundColor:'white',color:'black'}}>
               {show ? "hide" : "show"}
             </Button>
           </InputRightElement>
@@ -257,9 +263,11 @@ const SignUp = () => {
           type="file"
           name="photos"
           onChange={handleChange}
+           focusBorderColor="black"
           accept="image/*"
           multiple
           required
+          _placeholder={{ color: 'white' }}
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -277,6 +285,8 @@ const SignUp = () => {
           type="text"
           onChange={handleChange}
           placeholder="Enter gym name"
+          _placeholder={{ color: 'white' }}
+           focusBorderColor="black"
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -294,6 +304,8 @@ const SignUp = () => {
           name="ownerName"
           onChange={handleChange}
           placeholder="Enter gym owner name"
+          _placeholder={{ color: 'white' }}
+           focusBorderColor="black"
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -311,6 +323,8 @@ const SignUp = () => {
           name="description"
           onChange={handleChange}
           placeholder="Enter gym description"
+          _placeholder={{ color: 'white' }}
+           focusBorderColor="black"
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -328,6 +342,8 @@ const SignUp = () => {
           name="location"
           onChange={handleChange}
           placeholder="Enter gym location"
+          _placeholder={{ color: 'white' }}
+           focusBorderColor="black" 
           // border="none"
           // borderBottom="2px solid white" // Adding bottom border
           // borderRadius="0" // Ensuring no rounded corners
@@ -341,7 +357,7 @@ const SignUp = () => {
       <Button
         colorScheme="blue"
         width="100%"
-        style={{ marginTop: 15 }}
+        style={{ marginTop: 15,backgroundColor:'white',color:'black' }}
         onClick={handleSubmit}
         isLoading={loading}
       >

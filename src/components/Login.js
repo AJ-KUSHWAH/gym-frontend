@@ -70,13 +70,15 @@ const Login = () => {
 
         <FormControl isRequired>
         <FormLabel >Email: </FormLabel>
-            <Input type='email' placeholder='Enter your email' onChange={(e)=>setEmail(e.target.value)} ></Input>
+            <Input type='email' placeholder='Enter your email'  _placeholder={{ color: 'white' }}
+           focusBorderColor="black" onChange={(e)=>setEmail(e.target.value)} ></Input>
         </FormControl>
 
         <FormControl m="10px 0 10px 0" isRequired >
         <FormLabel>Password: </FormLabel>
         <InputGroup>
-            <Input type={show?"text":"password"} placeholder='Enter your password' onChange={(e)=>setPassword(e.target.value)} ></Input>
+            <Input type={show?"text":"password"} placeholder='Enter your password'  _placeholder={{ color: 'white' }}
+           focusBorderColor="black" onChange={(e)=>setPassword(e.target.value)} ></Input>
             <InputRightElement width="4.5em" p="3px 0 3px 0" ><Button onClick={handleClick}>{show?"hide":"show"}</Button></InputRightElement>
         </InputGroup>
         </FormControl>
@@ -84,7 +86,7 @@ const Login = () => {
        <Button 
         colorScheme='blue'
         width="100%"
-        style={{marginTop:15}}
+        style={{marginTop:15,backgroundColor:'white',color:'black'}}
         isLoading={loading}
         onClick={submitHandler}
        >

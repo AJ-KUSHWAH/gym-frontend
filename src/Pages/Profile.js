@@ -50,13 +50,18 @@ const Profile = () => {
       gymName: userInfo.gymName,
       ownerName: userInfo.ownerName,
       description: userInfo.description,
+      annual_subscription_price:userInfo.annual_subscription_price?userInfo.annual_subscription_price:"",
+      male_female_allow:userInfo.male_female_allow?userInfo.male_female_allow:"",
+      timing:userInfo.timing?userInfo.timing:"",
+      gym_equipments:userInfo.gym_equipments?userInfo.gym_equipments:"",
+      total_occupancy:userInfo.total_occupancy?userInfo.total_occupancy:"",
+      no_of_trainer_available:userInfo.no_of_trainer_available?userInfo.no_of_trainer_available:""
     });
 
     setLoading(false);
   }, [navigate]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(userInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [photos, setPhotos] = useState([]);
   const [userData, setUserData] = useState({});
@@ -69,6 +74,12 @@ const Profile = () => {
     location: "",
     gymName: "",
     ownerName: "",
+    annual_subscription_price:"",
+    gym_equipments:"",
+    timing:"",
+    no_of_trainer_available:"",
+    total_occupancy:"",
+    male_female_allow:""
   });
 
   const toast = useToast();
@@ -87,10 +98,8 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData.photos);
       setLoading(true);
       const uploadedImageURLs = await uploadImages(formData.photos);
-      console.log(uploadedImageURLs);
 
       await updateFormData({
         gymName: formData.gymName,
@@ -98,6 +107,12 @@ const Profile = () => {
         description: formData.description,
         location: formData.location,
         photos: uploadedImageURLs,
+        annual_subscription_price:formData.annual_subscription_price,
+        gym_equipments:formData.gym_equipments,
+        timing:formData.timing,
+        no_of_trainer_available:formData.no_of_trainer_available,
+        total_occupancy:formData.total_occupancy,
+        male_female_allow:formData.male_female_allow
       });
 
       setFormData({
@@ -106,9 +121,14 @@ const Profile = () => {
         location: "",
         gymName: "",
         ownerName: "",
+        annual_subscription_price:"",
+        gym_equipments:"",
+        timing:"",
+        no_of_trainer_available:"",
+        total_occupancy:"",
+        male_female_allow:""
       });
-      // document.location.reload();
-      console.log("Form submitted successfully!");
+      document.location.reload();
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -141,6 +161,12 @@ const Profile = () => {
     location,
     description,
     photos,
+    annual_subscription_price,
+    gym_equipments,
+    timing,
+    no_of_trainer_available,
+    total_occupancy,
+    male_female_allow
   }) => {
     const config = {
       headers: {
@@ -157,6 +183,12 @@ const Profile = () => {
           location,
           description,
           photos,
+          annual_subscription_price,
+          gym_equipments,
+          timing,
+          no_of_trainer_available,
+          total_occupancy,
+          male_female_allow,
           userId: userInfo._id,
         },
         config
@@ -203,19 +235,19 @@ const Profile = () => {
         </Box>
 
         <Box
-          h={"100vh"}
+          h={"100vh"}  
           alignContent={"center"}
           bgImage="url('/assets/gym-bg1.jpeg')"
         >
           <Flex minW={"-moz-fit-content"} alignContent={"center"}>
-            <Card marginInline={"10%"} mb={"50px"} w={"500px"}>
+            <Card marginInline={"10%"}  height={"672px"}  w={"500px"}>
               <Text textAlign={"center"} fontSize={"5xl"}>
                 Gym Details
               </Text>
-              <Box margin={"10%"}>
+              <Box>
                 <div
                   style={{
-                    padding: "20px",
+                    padding: "10px 20px 15px",
                     display: "flex",
                     justifyContent: "space-between",
                   }}
@@ -225,7 +257,7 @@ const Profile = () => {
                 </div>
                 <div
                   style={{
-                    padding: "20px",
+                    padding: "10px 20px 15px",
                     display: "flex",
                     justifyContent: "space-between",
                   }}
@@ -237,7 +269,7 @@ const Profile = () => {
                 </div>
                 <div
                   style={{
-                    padding: "20px",
+                    padding: "10px 20px 15px",
                     display: "flex",
                     justifyContent: "space-between",
                   }}
@@ -249,7 +281,7 @@ const Profile = () => {
                 </div>
                 <div
                   style={{
-                    padding: "20px",
+                    padding: "10px 20px 15px",
                     display: "flex",
                     justifyContent: "space-between",
                   }}
@@ -257,6 +289,79 @@ const Profile = () => {
                   <Text fontSize={"xl"}>Location</Text>
                   <Text fontSize={"xl"} style={{ float: "right" }}>
                     {userData.location}
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 20px 15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>Annual Subscription Price</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.annual_subscription_price}
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 20px 15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>Male Female Allow</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.male_female_allow}
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 20px 15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>Gym Equipments</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.gym_equipments}
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 20px 10px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>Timing</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.timing}
+                  </Text>
+                </div>
+
+                <div
+                  style={{
+                    padding: "10px 20px 15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>Total Occupancy</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.total_occupancy}
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 20px 15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text fontSize={"xl"}>No of trainers available</Text>
+                  <Text fontSize={"xl"} style={{ float: "right" }}>
+                    {userData.no_of_trainer_available}
                   </Text>
                 </div>
               </Box>
@@ -276,10 +381,11 @@ const Profile = () => {
               alignContent={"center"}
               maxW={"fit-content"}
               height={"fit-content"}
-              mt={"100px"}
+              bgColor={"#686D76"}
+            //   mt={"100px"}
               ml={"200px"}
             >
-              <QRCodeDisplay data={formData} />
+              <QRCodeDisplay data={formData} /> 
             </Card>
           </Flex>
         </Box>
@@ -345,6 +451,66 @@ const Profile = () => {
                   value={formData.location}
                   onChange={handleChange}
                   placeholder="Enter gym location"
+                  required
+                />
+              </FormControl>
+              <FormControl id="annual_subscription_price">
+                <FormLabel fontSize={20}>Annual Subscription Price</FormLabel>
+                <Input
+                  name="annual_subscription_price"
+                  onChange={handleChange}
+                  value={formData.annual_subscription_price}
+                  placeholder="Enter annual subscription price"
+                  required
+                />
+              </FormControl>
+              <FormControl id="gym_equipments">
+                <FormLabel fontSize={20}>Gym equipments</FormLabel>
+                <Input
+                  name="gym_equipments"
+                  onChange={handleChange}
+                  value={formData.gym_equipments}
+                  placeholder="Enter gym equipments"
+                  required
+                />
+              </FormControl>
+              <FormControl id="male_female_allow">
+                <FormLabel fontSize={20}>Male Female Allow</FormLabel>
+                <Input
+                  name="male_female_allow"
+                  onChange={handleChange}
+                  value={formData.male_female_allow}
+                  placeholder="Enter which are allowed"
+                  required
+                />
+              </FormControl>
+              <FormControl id="timing">
+                <FormLabel fontSize={20}>Timing</FormLabel>
+                <Input
+                  name="timing"
+                  onChange={handleChange}
+                  value={formData.timing}
+                  placeholder="Enter timing"
+                  required
+                />
+              </FormControl>
+              <FormControl id="total_occupancy">
+                <FormLabel fontSize={20}>Total Occupancy</FormLabel>
+                <Input
+                  name="total_occupancy"
+                  onChange={handleChange}
+                  value={formData.total_occupancy}
+                  placeholder="Enter total occupancy"
+                  required
+                />
+              </FormControl>
+              <FormControl id="no_of_trainer_available">
+                <FormLabel fontSize={20}>Number of Trainer Available</FormLabel>
+                <Input
+                  name="no_of_trainer_available"
+                  onChange={handleChange}
+                  value={formData.no_of_trainer_available}
+                  placeholder="Enter number of trainer available"
                   required
                 />
               </FormControl>

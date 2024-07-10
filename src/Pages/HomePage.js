@@ -23,7 +23,7 @@ const HomePage = () => {
       <Container
         maxW="xl"
         centerContent
-        bg={"ThreeDDarkShadow"}
+        bg={"#686D76"}
         // backgroundImage="url('../assets/gym-bg1.jpeg')" // Replace with the path to your image
         // backgroundSize="cover"
         // backgroundPosition="center"
@@ -54,8 +54,8 @@ const HomePage = () => {
           border={"none"}
         >
           <TabList m="10px 0 10px 0" shadow={"white"}>
-            <Tab width="50%">SignUP</Tab>
-            <Tab width="50%">Login</Tab>
+            <Tab _selected={{bg: "white"}} width="50%">SignUP</Tab>
+            <Tab _selected={{bg: "white"}} width="50%">Login</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
